@@ -1,0 +1,12 @@
+{
+  "name": "minimarket-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dockerized json-server mock API for products and promotions",
+  "scripts": {
+    "start": "node scripts/start-json-server.js"
+  },
+  "dependencies": {
+    "json-server": "^0.17.4"
+  }
+}
