@@ -1,13 +1,10 @@
 services:
   mock-api:
-    image: node:20-alpine
-    working_dir: /app
-    command: sh -c "npm install --no-package-lock --silent && npm start"
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "${API_PORT:-3000}:3000"
-    volumes:
-      - ./:/app:ro
-      - node_modules:/app/node_modules
 
   swagger-ui:
     image: swaggerapi/swagger-ui:latest
@@ -19,6 +16,3 @@ services:
       SWAGGER_JSON: /spec/openapi.yaml
     volumes:
       - ./openapi/openapi.yaml:/spec/openapi.yaml:ro
-
-volumes:
-  node_modules:
