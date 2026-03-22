@@ -1,0 +1,181 @@
+openapi: 3.0.3
+info:
+  title: Minimarket Mock API
+  version: 1.0.0
+  description: Development and testing API for minimarket products and promotions.
+servers:
+  - url: http://localhost:3000
+    description: Local mock API
+tags:
+  - name: products
+  - name: promotions
+paths:
+  /products:
+    get:
+      tags: [products]
+      summary: List products
+      description: Returns all products. json-server query params are supported.
+      parameters:
+        - name: _page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+        - name: _limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+        - name: _sort
+          in: query
+          schema:
+            type: string
+        - name: _order
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+      responses:
+        "200":
+          description: Product collection
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+  /products/{id}:
+    get:
+      tags: [products]
+      summary: Get product by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found
+  /promotions:
+    get:
+      tags: [promotions]
+      summary: List promotions
+      description: Returns all promotions. json-server query params are supported.
+      parameters:
+        - name: _page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+        - name: _limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+        - name: _sort
+          in: query
+          schema:
+            type: string
+        - name: _order
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+      responses:
+        "200":
+          description: Promotion collection
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Promotion"
+  /promotions/{id}:
+    get:
+      tags: [promotions]
+      summary: Get promotion by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Promotion found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Promotion"
+        "404":
+          description: Promotion not found
+components:
+  schemas:
+    Product:
+      type: object
+      required: [id, name, category, priceCents, stock, imageUrl]
+      properties:
+        id:
+          type: string
+          example: p1
+        name:
+          type: string
+          example: Leche Entera 1L
+        category:
+          type: string
+          example: Dairy
+        priceCents:
+          type: integer
+          minimum: 0
+          example: 120
+        stock:
+          type: integer
+          minimum: 0
+          example: 8
+        imageUrl:
+          type: string
+          format: uri
+          example: https://images.unsplash.com/photo-1580910051074-3eb694886505
+    Promotion:
+      type: object
+      required:
+        [id, productId, type, percent, buyX, payY, startAtEpoch, endAtEpoch]
+      properties:
+        id:
+          type: string
+          example: promo1
+        productId:
+          type: string
+          example: p1
+        type:
+          type: string
+          enum: [PERCENT, BUY_X_PAY_Y]
+        percent:
+          type: integer
+          nullable: true
+          minimum: 0
+          maximum: 100
+          example: 20
+        buyX:
+          type: integer
+          nullable: true
+          minimum: 1
+          example: 2
+        payY:
+          type: integer
+          nullable: true
+          minimum: 1
+          example: 1
+        startAtEpoch:
+          type: integer
+          example: 1700000000
+        endAtEpoch:
+          type: integer
+          example: 1893456000
